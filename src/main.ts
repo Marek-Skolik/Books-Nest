@@ -3,6 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { PrismaService } from './shared/services/prisma.service';
 import * as cookieParser from 'cookie-parser';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,5 +15,8 @@ async function bootstrap() {
   await prismaService.enableShutdownHooks(app);
 
   await app.listen(3000);
+
+  const configService = app.get(ConfigService);
+  await app.listen(configService.get('port'));
 }
 bootstrap();

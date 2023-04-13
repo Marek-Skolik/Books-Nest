@@ -1,7 +1,7 @@
-import { Controller, Post, Body, UseGuards, Request, Response } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request, Response, Delete } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDTO } from './register.auth.dto';
-import { LocalAuthGuard } from './local-auth.guard';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -12,13 +12,12 @@ export class AuthController {
       return this.authService.register(registrationData);
   };
 
-  @UseGuards(LocalAuthGuard)
-  @Post('login')
-    async login(@Request() req, @Response() res) {
-    const tokens = await this.authService.createSession(req.user);
-    res.cookie('auth', tokens, { httpOnly: true });
+  @UseGuards(JwtAuthGuard)
+  @Delete('logout')
+  async logout(@Response() res) {
+    res.clearCookie('auth', { httpOnly: true });
     res.send({
-    message: 'success',
+      message: 'success',
     });
   }
 }

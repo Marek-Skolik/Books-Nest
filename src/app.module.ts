@@ -9,12 +9,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthorsModule } from './authors/authors.module';
 import { BooksModule } from './books/books.module';
-import { UserModule } from './user/user.module';
+import { UsersModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { ConfigModule } from '@nestjs/config';
+import configuration from './config/configuration';
 
 @Module({
-  imports: [AuthorsModule, BooksModule, UserModule, AuthModule, PrismaModule],
+  imports: [AuthorsModule, BooksModule, UsersModule, AuthModule, PrismaModule, ConfigModule.forRoot({load: [configuration], isGlobal: true })],
   controllers: [AppController],
   providers: [AppService],
 })
